@@ -1,7 +1,7 @@
 package ca.chrischristakis.ssgl;
 
-import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.Callbacks.*;
+import static org.lwjgl.glfw.GLFW.*;
 
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -10,13 +10,40 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
 
+import ca.chrischristakis.ssgl.input.KeyInput;
+import ca.chrischristakis.ssgl.scene.Scene;
+
 public class Main implements Runnable
 {
+	
+	/*
+	 * TODO:
+	 * - Shaders x
+	 * - VAO x 
+	 * - MVP matrices x
+	 * - KeyInput x
+	 * - Texture
+	 * - Entity support
+	 * - Player
+	 * - Shooting
+	 * - Enemies
+	 * - Powerups
+	 * - Score
+	 * - Text
+	 * - Sound
+	 * - Lighting
+	 * - Boss
+	 */
+	
 	public static boolean running;
 	public static int WIDTH = 1000, HEIGHT= 900;
 	
 	private Thread thread;
 	private long window;
+	
+	private Scene scene;
+	
+	public int frames, updates;
 	
 	public void start()
 	{
@@ -43,6 +70,7 @@ public class Main implements Runnable
 		glfwSetWindowPos(window, (vidMode.width() - WIDTH)/2, (vidMode.height()-HEIGHT)/2);
 		glfwSetWindowSizeLimits(window, 500, 400, GLFW_DONT_CARE, GLFW_DONT_CARE);
 		
+		glfwSetKeyCallback(window, new KeyInput());
 		glfwSetWindowSizeCallback(window,  new GLFWWindowSizeCallback()
 	    {
 	        @Override
@@ -51,6 +79,10 @@ public class Main implements Runnable
 	        	GL15.glViewport(0, 0, width, height);
 	        	WIDTH = width;
 	            HEIGHT = height;
+	            update();
+	            render();
+	            frames = 0;
+	            updates = 0;
 	        }
 	    });
 		
@@ -60,6 +92,8 @@ public class Main implements Runnable
 		GL30.glClearColor(0.0f, 0.0f, 0.1f, 1.0f);
 		GL15.glViewport(0, 0, WIDTH, HEIGHT);
 		glfwSwapInterval(0);
+		
+		scene = new Scene();
 		
 		glfwShowWindow(window);
 	}
@@ -75,10 +109,11 @@ public class Main implements Runnable
 		long last = System.nanoTime();
 		long now;
 		
-		int frames = 0;
-		int updates = 0;
+		frames = 0;
+		updates = 0;
 		long timer = System.currentTimeMillis();
 		
+		GL30.glPolygonMode(GL30.GL_FRONT_AND_BACK, GL30.GL_FILL);
 		while(!glfwWindowShouldClose(window) && running)
 		{
 			now = System.nanoTime();
@@ -111,11 +146,14 @@ public class Main implements Runnable
 	public void update()
 	{
 		glfwPollEvents();
+		scene.update();
 	}
 	
 	public void render()
 	{
 		GL30.glClear(GL30.GL_COLOR_BUFFER_BIT);
+		
+		scene.render();
 		
 		glfwSwapBuffers(window);
 	}
