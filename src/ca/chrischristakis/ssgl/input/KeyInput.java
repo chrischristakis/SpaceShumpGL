@@ -13,6 +13,7 @@ public class KeyInput extends GLFWKeyCallback
 	@Override
 	public void invoke(long window, int key, int scancode, int action, int mods) 
 	{
+		if(key < 0) return;
 		keys[key] = (action != GLFW.GLFW_RELEASE);
 		if(keys[GLFW.GLFW_KEY_ESCAPE])
 			Main.running = false;

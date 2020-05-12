@@ -7,7 +7,7 @@ import ca.chrischristakis.ssgl.utils.BufferUtils;
 public class VAO 
 {
 	
-	private int vbo, vao, ebo;
+	private int vbo, vao, ebo, tbo;
 	private int vertNum;
 	
 	public VAO(float[] verts, byte[] ind)
@@ -26,6 +26,24 @@ public class VAO
 		GL30.glBindBuffer(GL30.GL_ELEMENT_ARRAY_BUFFER, ebo);
 		GL30.glBufferData(GL30.GL_ELEMENT_ARRAY_BUFFER, BufferUtils.createByteBuffer(ind), GL30.GL_STATIC_DRAW);
 		
+		GL30.glBindVertexArray(0);
+	}
+	
+	public VAO(float[] verts, byte[] ind, float[] tc)
+	{
+		this(verts, ind);
+		attachTexture(tc);
+	}
+	
+	public void attachTexture(float[] tc)
+	{
+		tbo = GL30.glGenBuffers();
+		GL30.glBindVertexArray(vao);
+		GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, tbo);
+		GL30.glBufferData(GL30.GL_ARRAY_BUFFER, BufferUtils.createFloatBuffer(tc), GL30.GL_STATIC_DRAW);
+		GL30.glVertexAttribPointer(1, 2, GL30.GL_FLOAT, false, 0, 0);
+		GL30.glEnableVertexAttribArray(1);
+
 		GL30.glBindVertexArray(0);
 	}
 	

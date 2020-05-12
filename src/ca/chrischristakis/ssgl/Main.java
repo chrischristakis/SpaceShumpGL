@@ -22,11 +22,13 @@ public class Main implements Runnable
 	 * - VAO x 
 	 * - MVP matrices x
 	 * - KeyInput x
-	 * - Texture
-	 * - Entity support
-	 * - Player
-	 * - Shooting
-	 * - Enemies
+	 * - Texture x
+	 * - Entity support x
+	 * - Player x
+	 * - Shooting x
+	 * - Enemies x
+	 * - Stars in the background x
+	 * - Entity Handler
 	 * - Powerups
 	 * - Score
 	 * - Text

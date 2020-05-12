@@ -1,68 +1,49 @@
 package ca.chrischristakis.ssgl.scene;
 
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
-import org.lwjgl.glfw.GLFW;
 
 import ca.chrischristakis.ssgl.Main;
-import ca.chrischristakis.ssgl.input.KeyInput;
+import ca.chrischristakis.ssgl.entities.Enemy1;
+import ca.chrischristakis.ssgl.entities.Player;
+import ca.chrischristakis.ssgl.entities.StarManager;
 import ca.chrischristakis.ssgl.ogl.ShaderProgram;
-import ca.chrischristakis.ssgl.ogl.VAO;
+import ca.chrischristakis.ssgl.utils.TextureUtils;
 
 public class Scene 
 {
 	
-	private VAO vao;
-	private ShaderProgram shader;
+	public static ShaderProgram texShader, shader;
+	public static Matrix4f view, projection;
 	
-	private Matrix4f model, view, projection;
-	private Vector3f position = new Vector3f();
+	private StarManager sm;
+	private Player p;
+	private Enemy1 e;
 	
 	public Scene()
 	{
-		float[] verts = {
-				-10.0f, -10.0f, 0.0f,
-				10.0f, -10.0f, 0.0f,
-				10.0f, 10.f, 0.0f,
-				-10.0f, 10.0f, 0.0f
-		};
-		
-		byte[] inds = {
-				0,1,2,
-				2,3,0
-		};
-		vao = new VAO(verts, inds);
-		
-		model = new Matrix4f().translate(new Vector3f(100.0f, 100.0f, 0.0f));
+		TextureUtils.init();
 		view = new Matrix4f();
 		projection = new Matrix4f().ortho(0.0f, Main.WIDTH, 0.0f, Main.HEIGHT, -0.1f, 1.0f);
-		
+		texShader = new ShaderProgram("texShader.vert", "texShader.frag");
 		shader = new ShaderProgram("shader.vert", "shader.frag");
-		shader.bind();
+		
+		p = new Player(100, 100, 100, 100);
+		e = new Enemy1(400, Main.HEIGHT, 40, 60);
+		sm = new StarManager(30);
 	}
 	
 	public void update()
 	{
-		model.identity();
-		if(KeyInput.isPressed(GLFW.GLFW_KEY_W))
-			position.y += 5f;
-		if(KeyInput.isPressed(GLFW.GLFW_KEY_S))
-			position.y -= 5f;
-		if(KeyInput.isPressed(GLFW.GLFW_KEY_A))
-			position.x -= 5f;
-		if(KeyInput.isPressed(GLFW.GLFW_KEY_D))
-			position.x += 5f;
-		
-		model.translate(position);
+		sm.update();
+		e.update();
+		p.update();
 	}
 	
-	Matrix4f result = new Matrix4f();
 	public void render()
 	{
-		result.identity();
-		result.mul(projection).mul(view).mul(model);
-		shader.setMat4f("mvp", result);
-		vao.draw();
+		sm.render();
+		e.render();
+		p.render();
 	}
 
 }
