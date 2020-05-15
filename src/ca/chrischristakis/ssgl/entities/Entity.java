@@ -12,6 +12,7 @@ abstract public class Entity
 {
 
 	public int width, height;
+	public boolean isDead;
 	public Vector3f position;
 	public Matrix4f model;
 	

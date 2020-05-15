@@ -10,17 +10,27 @@ import ca.chrischristakis.ssgl.utils.TextureUtils;
 public class Player extends Entity
 {
 	
-	private Bullet[] bullets = new Bullet[5];
+	private Bullet[] bullets = new Bullet[3];
+	private Bullet[] bulletCount = new Bullet[bullets.length];
 	private boolean spacePressed;
+	
+	private int activeShots = 0;
 	
 	public Player(int x, int y, int width, int height)
 	{
 		super(x,y,width,height, TextureUtils.player);	
 		for(int i = 0; i < bullets.length; i++)
 		{
-			bullets[i] = new Bullet((int) position.x + width/2, (int) position.y + height, 6, 40);
+			bullets[i] = new Bullet((int) position.x + width/2, (int) position.y + height, 7, 40);
 			bullets[i].active = false;
 			bullets[i].velY = 10;
+		}
+		
+		for(int i = 0; i < bulletCount.length; i++)
+		{
+			bulletCount[i] = new Bullet((int) (width/bulletCount.length), (int) position.y - 10, 6, 6);
+			bulletCount[i].active = true;
+			bulletCount[i].isDisplay = true;
 		}
 	}
 
@@ -45,6 +55,9 @@ public class Player extends Entity
 					bullets[i].position.x = position.x + width/2;
 					bullets[i].position.y = position.y + height;
 					bullets[i].active = true;
+				
+					bulletCount[bulletCount.length - activeShots - 1].active = false;
+					activeShots++;
 					break;
 				}
 		}
@@ -57,9 +70,22 @@ public class Player extends Entity
 		if(position.y + height > Main.HEIGHT) position.y = Main.HEIGHT - height;
 		
 		for(int i = 0; i < bullets.length; i++)
+		{
 			if(bullets[i].active)
+			{
 				bullets[i].update();
-		
+				if((bullets[i].position.y >= Main.HEIGHT || bullets[i].position.y < 0) && !bullets[i].isDisplay)
+				{
+					bullets[i].active = false;
+					bulletCount[bulletCount.length - activeShots].active = true;
+					activeShots--;
+				}
+			}
+			
+			bulletCount[i].position.x = position.x + width/bulletCount.length * i + (width/bulletCount.length - bulletCount[i].width)/2;
+			bulletCount[i].position.y = position.y - 30;
+			bulletCount[i].update();
+		}
 		model.translate((int) position.x, (int) position.y, 0.0f);
 	}
 
@@ -72,8 +98,26 @@ public class Player extends Entity
 		tex.unbind();
 		
 		for(int i = 0; i < bullets.length; i++)
+		{
 			if(bullets[i].active)
 				bullets[i].render();
+			if(bulletCount[i].active)
+				bulletCount[i].render();
+		}
+	}
+	
+	public boolean checkBulletCol(Entity e)
+	{
+		boolean result = false;
+		for(int i = 0; i < bullets.length; i++)
+			if(bullets[i].collidesWith(e) && bullets[i].active) 
+			{ 
+				result = true;
+				bullets[i].active = false;
+				bulletCount[bulletCount.length - activeShots].active = true;
+				activeShots--;
+			}
+		return result;
 	}
 
 }

@@ -28,17 +28,19 @@ public class Main implements Runnable
 	 * - Shooting x
 	 * - Enemies x
 	 * - Stars in the background x
-	 * - Entity Handler
-	 * - Powerups
-	 * - Score
+	 * - Entity Handler x
 	 * - Text
+	 * - Health
+	 * - Score
+	 * - Powerups
 	 * - Sound
 	 * - Lighting
 	 * - Boss
+	 * - Healthbars
 	 */
 	
 	public static boolean running;
-	public static int WIDTH = 1000, HEIGHT= 900;
+	public static int WIDTH = 700, HEIGHT= 900;
 	
 	private Thread thread;
 	private long window;
@@ -73,6 +75,7 @@ public class Main implements Runnable
 		glfwSetWindowSizeLimits(window, 500, 400, GLFW_DONT_CARE, GLFW_DONT_CARE);
 		
 		glfwSetKeyCallback(window, new KeyInput());
+		
 		glfwSetWindowSizeCallback(window,  new GLFWWindowSizeCallback()
 	    {
 	        @Override
@@ -85,9 +88,10 @@ public class Main implements Runnable
 	            render();
 	            frames = 0;
 	            updates = 0;
+	            Scene.updateProjection();
 	        }
 	    });
-		
+
 		glfwMakeContextCurrent(window);
 		GL.createCapabilities();
 		

@@ -1,8 +1,6 @@
 package ca.chrischristakis.ssgl.entities;
 
 import org.joml.Vector3f;
-
-import ca.chrischristakis.ssgl.Main;
 import ca.chrischristakis.ssgl.scene.Scene;
 
 public class Bullet extends Entity
@@ -10,6 +8,7 @@ public class Bullet extends Entity
 
 	public float velY = 0.5f;
 	public boolean active = false;
+	public boolean isDisplay = false;
 	public Vector3f color = new Vector3f(1.0f, 1.0f, 1.0f);
 	
 	public Bullet(int x, int y, int width, int height) 
@@ -21,8 +20,6 @@ public class Bullet extends Entity
 	public void update() 
 	{
 		position.y += velY;
-		if(position.y >= Main.HEIGHT || position.y < 0)
-			active = false;
 		
 		model.identity();
 		model.translate((int) position.x, (int) position.y, 0.0f);
