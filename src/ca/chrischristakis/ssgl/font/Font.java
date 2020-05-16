@@ -11,12 +11,14 @@ import ca.chrischristakis.ssgl.ogl.Texture;
 public class Font 
 {
 	
-	private Texture texture;
-	public Letter[] letters = new Letter[256];
+	public Texture texture;
+	private Letter[] letters = new Letter[256];
 	
 	private HashMap<String, String> elements = new HashMap<String, String>();
 	private BufferedReader reader;
 	private String line; //the BufferedReader line.
+	
+	public int fntWidth, fntHeight;
 	
 	/*
 	 * Both the .fnt and .png files for the font must have the same name, for example spaceFont.fnt and spaceFont.png
@@ -30,12 +32,16 @@ public class Font
 	public void loadFont(String path)
 	{
 		try {
-			reader = new BufferedReader(new FileReader(path));
+			reader = new BufferedReader(new FileReader(path + ".fnt"));
 
 			//Skip straight into the information about characters
 			
 			nextLine();
 			nextLine();
+			
+			fntWidth = getIntegerValue("scaleW");
+			fntHeight = getIntegerValue("scaleH");
+			
 			nextLine();
 			nextLine();
 			
@@ -91,11 +97,16 @@ public class Font
 				if(splitter[i].contains("="))
 				{
 					values = splitter[i].split("="); //a key, and a value. 2 elements tops.
-					if(values.length == 2) //just to make sure.
+					if(values.length == 2) //just to make sure :)
 						elements.put(values[0], values[1]);
 				}
 			return true;
 		}
+	}
+	
+	public Letter getLetter(int id)
+	{
+		return letters[id];
 	}
 	
 	public void bind()

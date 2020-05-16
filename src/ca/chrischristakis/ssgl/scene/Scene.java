@@ -3,6 +3,7 @@ package ca.chrischristakis.ssgl.scene;
 import java.util.Random;
 
 import org.joml.Matrix4f;
+import org.lwjgl.glfw.GLFW;
 
 import ca.chrischristakis.ssgl.Main;
 import ca.chrischristakis.ssgl.entities.Enemy1;
@@ -10,6 +11,7 @@ import ca.chrischristakis.ssgl.entities.EntityManager;
 import ca.chrischristakis.ssgl.entities.Player;
 import ca.chrischristakis.ssgl.entities.StarManager;
 import ca.chrischristakis.ssgl.font.Font;
+import ca.chrischristakis.ssgl.font.Text;
 import ca.chrischristakis.ssgl.ogl.ShaderProgram;
 import ca.chrischristakis.ssgl.utils.TextureUtils;
 
@@ -18,7 +20,7 @@ public class Scene
 	
 	private Random rand = new Random();
 	
-	public static ShaderProgram texShader, shader;
+	public static ShaderProgram texShader, shader, fontShader;
 	public static Matrix4f view, projection;
 	
 	private float enemyInterval = 0.6f;
@@ -27,6 +29,7 @@ public class Scene
 	private StarManager sm;
 	private EntityManager em;
 	private Player p;
+	Text test;
 	
 	public Scene()
 	{
@@ -35,8 +38,9 @@ public class Scene
 		projection = new Matrix4f().ortho(0.0f, Main.WIDTH, 0.0f, Main.HEIGHT, -0.1f, 1.0f);
 		texShader = new ShaderProgram("texShader.vert", "texShader.frag");
 		shader = new ShaderProgram("shader.vert", "shader.frag");
+		fontShader = new ShaderProgram("fontShader.vert", "fontShader.frag");
 		
-		Font font = new Font("spaceFont.fnt");
+		test =  new Text("Hello Twitter!", 50, 400, new Font("spaceFont"));
 		
 		p = new Player(100, 100, 100, 100);
 		sm = new StarManager(30);
@@ -51,6 +55,10 @@ public class Scene
 			lastEI = System.currentTimeMillis();
 		}
 		
+		test.color.x = (float) Math.sin(GLFW.glfwGetTime()*5);
+		test.color.y = (float) Math.cos(GLFW.glfwGetTime()*5);
+		test.color.z = (float) Math.sin(GLFW.glfwGetTime()*8);
+		
 		sm.update();
 		em.update();
 	}
@@ -59,6 +67,7 @@ public class Scene
 	{
 		sm.render();
 		em.render();
+		test.render();
 	}
 
 	public static void updateProjection()

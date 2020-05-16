@@ -8,7 +8,7 @@ out vec4 fragCol;
 
 void main()
 {
-	fragCol = texture(tex, tc);
+	fragCol = texture(tex, tc)*col;
 	if(fragCol.w < 1.0)
 		discard;
 }
