@@ -23,7 +23,20 @@ public class EntityManager
 			else
 				toRemove.add(e);
 			if(player.checkBulletCol(e))
+				e.health -= 10;
+			
+			if(e.position.y + e.height < 0)
+			{
 				e.isDead = true;
+				if(e instanceof Enemy1) //not enemy2
+					player.health -= 10;
+			}
+			
+			if(e.collidesWith(player) && !player.invincible)
+			{
+				player.damage(10);
+				e.isDead = true;
+			}
 		}
 		
 		if(toRemove.size() > 0)
@@ -32,9 +45,9 @@ public class EntityManager
 	
 	public void render()
 	{
-		player.render();
 		for(Entity e : entities)
 			e.render();	
+		player.render();
 	}
 	
 	public void add(Entity e)

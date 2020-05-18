@@ -3,10 +3,10 @@ package ca.chrischristakis.ssgl.scene;
 import java.util.Random;
 
 import org.joml.Matrix4f;
-import org.lwjgl.glfw.GLFW;
 
 import ca.chrischristakis.ssgl.Main;
 import ca.chrischristakis.ssgl.entities.Enemy1;
+import ca.chrischristakis.ssgl.entities.Enemy2;
 import ca.chrischristakis.ssgl.entities.EntityManager;
 import ca.chrischristakis.ssgl.entities.Player;
 import ca.chrischristakis.ssgl.entities.StarManager;
@@ -23,13 +23,16 @@ public class Scene
 	public static ShaderProgram texShader, shader, fontShader;
 	public static Matrix4f view, projection;
 	
-	private float enemyInterval = 0.6f;
+	private float enemyInterval = 2f;
 	private long lastEI = System.currentTimeMillis();
+	private long lastIntervalInc;
+	private float wallEnemySpawnChance = 10;
 	
 	private StarManager sm;
 	private EntityManager em;
 	private Player p;
-	Text test;
+	public static Font font;
+	public static Text score;
 	
 	public Scene()
 	{
@@ -40,24 +43,33 @@ public class Scene
 		shader = new ShaderProgram("shader.vert", "shader.frag");
 		fontShader = new ShaderProgram("fontShader.vert", "fontShader.frag");
 		
-		test =  new Text("Hello Twitter!", 50, 400, new Font("spaceFont"));
-		
+		font = new Font("spaceFont");
+	
 		p = new Player(100, 100, 100, 100);
 		sm = new StarManager(30);
 		em = new EntityManager(p);
+		score = new Text("Score: " + p.score, 0, Main.HEIGHT*2-500, font, 0.66f);
+		
+		lastIntervalInc = System.currentTimeMillis();
 	}
 	
 	public void update()
 	{
-		if(System.currentTimeMillis() - lastEI > enemyInterval * 1000)
+		if(System.currentTimeMillis() - lastIntervalInc > 8000)
 		{
-			em.add(new Enemy1(rand.nextInt(Main.WIDTH - 60), Main.HEIGHT, 60, 60));
-			lastEI = System.currentTimeMillis();
+			enemyInterval = Math.max(0.45f, enemyInterval - 0.5f);
+			if(wallEnemySpawnChance < 40) wallEnemySpawnChance+=5;	
+			lastIntervalInc = System.currentTimeMillis();
 		}
 		
-		test.color.x = (float) Math.sin(GLFW.glfwGetTime()*5);
-		test.color.y = (float) Math.cos(GLFW.glfwGetTime()*5);
-		test.color.z = (float) Math.sin(GLFW.glfwGetTime()*8);
+		if(System.currentTimeMillis() - lastEI > enemyInterval * 1000)
+		{
+			if(rand.nextInt(100) < 100 - wallEnemySpawnChance)
+				em.add(new Enemy1(rand.nextInt(Main.WIDTH - 60), Main.HEIGHT, 60, 60));
+			else
+				em.add(new Enemy2(rand.nextInt(Main.WIDTH - 60), Main.HEIGHT, 60, 60));
+			lastEI = System.currentTimeMillis();
+		}
 		
 		sm.update();
 		em.update();
@@ -67,7 +79,7 @@ public class Scene
 	{
 		sm.render();
 		em.render();
-		test.render();
+		score.render();
 	}
 
 	public static void updateProjection()

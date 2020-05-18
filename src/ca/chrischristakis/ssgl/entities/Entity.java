@@ -15,6 +15,7 @@ abstract public class Entity
 	public boolean isDead;
 	public Vector3f position;
 	public Matrix4f model;
+	public int health = 10;
 	
 	protected VAO vao;
 	protected Texture tex;

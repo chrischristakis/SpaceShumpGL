@@ -2,6 +2,7 @@ package ca.chrischristakis.ssgl.font;
 
 import java.util.ArrayList;
 
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import ca.chrischristakis.ssgl.ogl.VAO;
@@ -14,9 +15,14 @@ public class Text
 	private Font font;
 	
 	public Vector3f position;
+	private Matrix4f model = new Matrix4f();
 	
-	public Text(String content, int x, int y, Font font)
+	public float scale = 1.0f;
+	
+	public Text(String content, int x, int y, Font font, float scale)
 	{
+		this.scale = scale;
+		model.scale(scale);
 		this.font = font;
 		position = new Vector3f(x, y, 0.0f);
 		for(int i = 0; i < content.length(); i++)
@@ -45,15 +51,17 @@ public class Text
 		byte[] ind = {
 			0, 1, 2, 2, 3, 0
 		};
-		System.out.println(id);
 		vaos.add(new VAO(verts, ind, tc));
 	}
 	
 	public Vector3f color = new Vector3f(1.0f, 1.0f, 1.0f);
+	public Matrix4f result = new Matrix4f();
 	public void render()
 	{
+		result.identity();
+		result.mul(Scene.projection).mul(model);
 		Scene.fontShader.bind();
-		Scene.fontShader.setMat4f("mvp", Scene.projection);
+		Scene.fontShader.setMat4f("mvp", result);
 		Scene.fontShader.setVec3("col_in", color);
 		font.texture.bind();
 		for(int i = 0; i < vaos.size(); i++)

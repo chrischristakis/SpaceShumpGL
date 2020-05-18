@@ -1,18 +1,16 @@
 package ca.chrischristakis.ssgl.entities;
 
-import java.util.Random;
-
 import ca.chrischristakis.ssgl.scene.Scene;
 import ca.chrischristakis.ssgl.utils.TextureUtils;
 
-public class Enemy1 extends Entity
+public class Enemy2 extends Entity
 {
-
-	private static Random rand = new Random();
-	float velY = -2.4f;
+	float velY = -3f;
 	
-	public Enemy1(int x, int y, int width, int height) {
-		super(x, y, width, height, (rand.nextBoolean()? TextureUtils.enemy1 : TextureUtils.enemy2));
+	public Enemy2(int x, int y, int width, int height) {
+		super(x, y, width, height, TextureUtils.enemy3);
+		velY *= 0.5f;
+		health = 30;
 	}
 	
 	public void update()

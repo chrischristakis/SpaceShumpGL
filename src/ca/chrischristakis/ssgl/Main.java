@@ -29,14 +29,9 @@ public class Main implements Runnable
 	 * - Enemies x
 	 * - Stars in the background x
 	 * - Entity Handler x
-	 * - Text
-	 * - Health
-	 * - Score
-	 * - Powerups
-	 * - Sound
-	 * - Lighting
-	 * - Boss
-	 * - Healthbars
+	 * - Text x
+	 * - Health x
+	 * - Score x
 	 */
 	
 	public static boolean running;
