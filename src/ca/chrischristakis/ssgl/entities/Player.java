@@ -11,7 +11,7 @@ import ca.chrischristakis.ssgl.utils.TextureUtils;
 public class Player extends Entity
 {
 	
-	private Bullet[] bullets = new Bullet[3];
+	private Bullet[] bullets = new Bullet[5];
 	private Bullet[] bulletCount = new Bullet[bullets.length];
 	private boolean spacePressed;
 	public int score = 0;
