@@ -1,5 +1,5 @@
 # SpaceShumpGL
-A classic Space shooter made in OpenGL
+A classic Space shooter made in OpenGL </br>
 <img src="spaceShumpDemoImg.PNG" width = "500"></img>
 ## Controls
 - W -> Up
