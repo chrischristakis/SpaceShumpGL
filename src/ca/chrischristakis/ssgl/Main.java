@@ -114,7 +114,7 @@ public class Main implements Runnable
 		updates = 0;
 		long timer = System.currentTimeMillis();
 		
-		GL30.glPolygonMode(GL30.GL_FRONT_AND_BACK, GL30.GL_FILL);
+		//GL30.glPolygonMode(GL30.GL_FRONT_AND_BACK, GL30.GL_LINE);
 		while(!glfwWindowShouldClose(window) && running)
 		{
 			now = System.nanoTime();

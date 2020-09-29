@@ -3,8 +3,10 @@ package ca.chrischristakis.ssgl.scene;
 import java.util.Random;
 
 import org.joml.Matrix4f;
+import org.lwjgl.glfw.GLFW;
 
 import ca.chrischristakis.ssgl.Main;
+import ca.chrischristakis.ssgl.entities.Bullet;
 import ca.chrischristakis.ssgl.entities.Enemy1;
 import ca.chrischristakis.ssgl.entities.Enemy2;
 import ca.chrischristakis.ssgl.entities.EntityManager;

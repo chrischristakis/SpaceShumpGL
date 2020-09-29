@@ -32,7 +32,7 @@ public class Font
 	public void loadFont(String path)
 	{
 		try {
-			reader = new BufferedReader(new FileReader(path + ".fnt"));
+			reader = new BufferedReader(new FileReader("assets/" + path + ".fnt"));
 
 			//Skip straight into the information about characters
 			
